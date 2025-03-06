@@ -57,6 +57,7 @@ Guidelines for modifications:
 * HoJin Jeon
 * Hongwei Xiong
 * Hongyu Li
+* Hui Kang
 * Iretiayo Akinola
 * Jack Zeng
 * Jan Kerner
@@ -67,6 +68,7 @@ Guidelines for modifications:
 * Jinqi Wei
 * Johnson Sun
 * Kaixi Bao
+* Kingsley Liu
 * Kourosh Darvish
 * Kousheek Chakraborty
 * Lionel Gulich

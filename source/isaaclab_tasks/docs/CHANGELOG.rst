@@ -26,6 +26,8 @@ Added
 ^^^^^
 
 * Added ``Isaac-Stack-Cube-Franka-IK-Rel-Blueprint-v0`` stacking environment with camera inputs.
+* Added ``Isaac-Navigation-Flat-Obstacle-Anymal-C-v0`` environment as a manager-based RL env that implements the Anymal-C navigation task
+  with obstacle and camera sensor in the scene.
 
 
 0.10.24 (2025-02-13)

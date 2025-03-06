@@ -19,6 +19,7 @@ Added
 ^^^^^
 
 * Added symmetry and curiosity-based exploration configurations for RSL-RL wrapper.
+* Added configuration for RSL RL actor-critic networks with convolutional layers.
 
 
 0.1.1 (2025-03-10)
