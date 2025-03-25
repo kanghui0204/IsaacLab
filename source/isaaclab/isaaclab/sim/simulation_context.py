@@ -130,11 +130,19 @@ class SimulationContext(_SimulationContext):
         # change dispatcher to use the default dispatcher in PhysX SDK instead of carb tasking
         # note: dispatcher handles how threads are launched for multi-threaded physics
         carb_settings_iface.set_bool("/physics/physxDispatcher", True)
-        # disable contact processing in omni.physx if requested
-        # note: helpful when creating contact reporting over limited number of objects in the scene
-        if self.cfg.disable_contact_processing:
-            carb_settings_iface.set_bool("/physics/disableContactProcessing", True)
-        # enable custom geometry for cylinder and cone collision shapes to allow contact reporting for them
+        # disable contact processing in omni.physx
+        # note: we disable it by default to avoid the overhead of contact processing when it isn't needed.
+        #   The physics flag gets enabled when a contact sensor is created.
+        if hasattr(self.cfg, "disable_contact_processing"):
+            omni.log.warn(
+                "The `disable_contact_processing` attribute is deprecated and always set to True"
+                " to avoid unnecessary overhead. Contact processing is automatically enabled when"
+                " a contact sensor is created, so manual configuration is no longer required."
+            )
+        # FIXME: From investigation, it seems this flag only affects CPU physics. For GPU physics, contacts
+        #  are always processed. The issue is reported to the PhysX team by @mmittal.
+        carb_settings_iface.set_bool("/physics/disableContactProcessing", True)
+        # disable custom geometry for cylinder and cone collision shapes to allow contact reporting for them
         # reason: cylinders and cones aren't natively supported by PhysX so we need to use custom geometry flags
         # reference: https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/docs/Geometry.html?highlight=capsule#geometry
         carb_settings_iface.set_bool("/physics/collisionConeCustomGeometry", False)
@@ -157,18 +165,28 @@ class SimulationContext(_SimulationContext):
         self._has_gui = self._local_gui or self._livestream_gui
 
         # apply render settings from render config
-        carb_settings_iface.set_bool("/rtx/translucency/enabled", self.cfg.render.enable_translucency)
-        carb_settings_iface.set_bool("/rtx/reflections/enabled", self.cfg.render.enable_reflections)
-        carb_settings_iface.set_bool("/rtx/indirectDiffuse/enabled", self.cfg.render.enable_global_illumination)
-        carb_settings_iface.set_bool("/rtx-transient/dlssg/enabled", self.cfg.render.enable_dlssg)
-        carb_settings_iface.set_bool("/rtx-transient/dldenoiser/enabled", self.cfg.render.enable_dl_denoiser)
-        carb_settings_iface.set_int("/rtx/post/dlss/execMode", self.cfg.render.dlss_mode)
-        carb_settings_iface.set_bool("/rtx/directLighting/enabled", self.cfg.render.enable_direct_lighting)
-        carb_settings_iface.set_int(
-            "/rtx/directLighting/sampledLighting/samplesPerPixel", self.cfg.render.samples_per_pixel
-        )
-        carb_settings_iface.set_bool("/rtx/shadows/enabled", self.cfg.render.enable_shadows)
-        carb_settings_iface.set_bool("/rtx/ambientOcclusion/enabled", self.cfg.render.enable_ambient_occlusion)
+        if self.cfg.render.enable_translucency is not None:
+            carb_settings_iface.set_bool("/rtx/translucency/enabled", self.cfg.render.enable_translucency)
+        if self.cfg.render.enable_reflections is not None:
+            carb_settings_iface.set_bool("/rtx/reflections/enabled", self.cfg.render.enable_reflections)
+        if self.cfg.render.enable_global_illumination is not None:
+            carb_settings_iface.set_bool("/rtx/indirectDiffuse/enabled", self.cfg.render.enable_global_illumination)
+        if self.cfg.render.enable_dlssg is not None:
+            carb_settings_iface.set_bool("/rtx-transient/dlssg/enabled", self.cfg.render.enable_dlssg)
+        if self.cfg.render.enable_dl_denoiser is not None:
+            carb_settings_iface.set_bool("/rtx-transient/dldenoiser/enabled", self.cfg.render.enable_dl_denoiser)
+        if self.cfg.render.dlss_mode is not None:
+            carb_settings_iface.set_int("/rtx/post/dlss/execMode", self.cfg.render.dlss_mode)
+        if self.cfg.render.enable_direct_lighting is not None:
+            carb_settings_iface.set_bool("/rtx/directLighting/enabled", self.cfg.render.enable_direct_lighting)
+        if self.cfg.render.samples_per_pixel is not None:
+            carb_settings_iface.set_int(
+                "/rtx/directLighting/sampledLighting/samplesPerPixel", self.cfg.render.samples_per_pixel
+            )
+        if self.cfg.render.enable_shadows is not None:
+            carb_settings_iface.set_bool("/rtx/shadows/enabled", self.cfg.render.enable_shadows)
+        if self.cfg.render.enable_ambient_occlusion is not None:
+            carb_settings_iface.set_bool("/rtx/ambientOcclusion/enabled", self.cfg.render.enable_ambient_occlusion)
         # set denoiser mode
         try:
             import omni.replicator.core as rep
