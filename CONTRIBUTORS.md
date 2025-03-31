@@ -67,6 +67,7 @@ Guidelines for modifications:
 * Johnson Sun
 * Kaixi Bao
 * Kourosh Darvish
+* Kousheek Chakraborty
 * Lionel Gulich
 * Louis Le Lay
 * Lorenz Wellhausen
@@ -76,6 +77,7 @@ Guidelines for modifications:
 * Michael Noseworthy
 * Muhong Guo
 * Nicola Loi
+* Nuoyan Chen (Alvin)
 * Nuralem Abizov
 * Ori Gadot
 * Oyindamola Omotuyi
@@ -90,6 +92,7 @@ Guidelines for modifications:
 * Shafeef Omar
 * Shundo Kishi
 * Stephan Pleines
+* Victor Khaustov
 * Vladimir Fokow
 * Wei Yang
 * Xavier Nal
